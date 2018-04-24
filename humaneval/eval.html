@@ -1,0 +1,184 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css" rel="stylesheet" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+
+<!-- ${id} ${system} -->
+
+<style>
+
+.article p {
+    line-height: 1.8em;
+}
+
+em {
+    font-weight: bold;
+}
+
+.instructions {
+    color: #888;
+}
+
+.label {
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+    margin: 0 0.2rem;
+    color: #888;
+}
+
+.label.left  { margin-left:  -4rem; }
+.label.right { margin-right: -4rem; }
+
+.text-center {
+    text-align: center;
+}
+
+#submitButton {
+    padding: 0.5em 1.5em;
+    background-color: transparent;
+    border-radius: 0.25em;
+    border: 1px solid lightgray;
+    color: gray;
+    cursor: pointer;
+    outline: none;
+}
+
+#submitButton:disabled {
+    opacity: 0.4;
+}
+
+.ui.divider.sub.header {
+    margin-bottom: 1em;
+    font-style: italic;
+}
+    
+</style>
+
+
+<div class="ui stackable grid" style="margin: 0 auto; width: 100%;">
+
+    <div class="ten wide column article" style="border-right: 1px solid #ddd; max-height: 640px; overflow-y: auto">
+
+        <h4 class="ui horizontal divider header">Generated Summary</h4>
+
+        <p>
+
+        ${summary}
+        
+        </p>
+
+        <h4 class="ui horizontal divider header">Source Article</h4>
+
+        <h4 class="ui sub header" style="margin-bottom: 1em;">
+
+            ${title}
+            
+        </h4>
+
+        <p>
+
+        ${text}
+
+        </p>
+
+    </div>
+
+    <div class="six wide column center aligned">
+
+        <h4 class="ui horizontal divider header">Evaluation</h4>
+
+        <p class="instructions">
+            Using the <em>source article</em>, rate the quality of the <br />
+            <em>generated summary</em> along four dimensions:
+        </p>
+
+        <h4 class="ui horizontal divider sub header">Informativeness</h4>
+
+        <p>How well does the summary <br /> capture the key points of the article?</p>
+
+        <span class="label left">LOW</span>
+        <div class="ui small basic buttons">
+            <div class="ui button">1</div>
+            <div class="ui button">2</div>
+            <div class="ui button">3</div>
+            <div class="ui button">4</div>
+            <div class="ui button">5</div>
+            <input type="hidden" id="informativeness" name="informativeness" value=""></input>
+        </div>
+        <span class="label right">HIGH</span>
+
+        <h4 class="ui horizontal divider sub header">Relevance</h4>
+
+        <p>Are the details provided by the summary <br /> consistent with details in the article?</p>
+
+        <span class="label left">LOW</span>
+        <div class="ui small basic buttons">
+            <div class="ui button">1</div>
+            <div class="ui button">2</div>
+            <div class="ui button">3</div>
+            <div class="ui button">4</div>
+            <div class="ui button">5</div>
+            <input type="hidden" id="relevance" name="relevance" value=""></input>
+        </div>
+        <span class="label right">HIGH</span>
+
+        <h4 class="ui horizontal divider sub header">Fluency</h4>
+
+        <p>Are the individual sentences of the <br /> summary well-written and grammatical?</p>
+
+        <span class="label left">LOW</span>
+        <div class="ui small basic buttons">
+            <div class="ui button">1</div>
+            <div class="ui button">2</div>
+            <div class="ui button">3</div>
+            <div class="ui button">4</div>
+            <div class="ui button">5</div>
+            <input type="hidden" id="fluency" name="fluency" value=""></input>
+        </div>
+        <span class="label right">HIGH</span>
+
+        <h4 class="ui horizontal divider sub header">Coherence</h4>
+
+        <p>Do phrases and sentences of the summary <br /> fit together and make sense collectively?</p>
+
+        <span class="label left">LOW</span>
+        <div class="ui small basic buttons">
+            <div class="ui button">1</div>
+            <div class="ui button">2</div>
+            <div class="ui button">3</div>
+            <div class="ui button">4</div>
+            <div class="ui button">5</div>
+            <input type="hidden" id="coherence" name="coherence" value=""></input>
+        </div>
+        <span class="label right">HIGH</span>
+
+    </div>
+
+</div>
+
+<div class="ui divider" style="margin-top: 0.5em; margin-bottom: 0.5em"></div>
+
+
+<script>
+
+    $(document).ready(function() {
+
+        $("#submitButton").attr("disabled", "disabled");
+        
+        $(".ui.buttons .ui.button").click(function() {
+            $(this).addClass("active").siblings().removeClass("active");
+            $(this).parent().find("input").val($(this).text());
+
+            var inf = $("#informativeness").val();
+            var rel = $("#relevance").val();
+            var flu = $("#fluency").val();
+            var coh = $("#coherence").val();
+
+            if (inf !== "" && rel !== "" && flu !== "" && coh !== "") {
+
+                $("#submitButton").removeAttr("disabled");
+                
+            }
+        })
+    });
+
+</script>
