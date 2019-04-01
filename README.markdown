@@ -7,6 +7,14 @@ Newsroom requires Python 3 and can be installed using `pip`:
 pip install -e git+git://github.com/clic-lab/newsroom.git#egg=newsroom
 ```
 
+Getting the Data
+================
+
+There are two ways to obtain the summaries dataset. You may use the scripts 
+described below to scrape the web pages used in the dataset and extract the summaries. 
+Alternatively, the data is also available from 
+[https://summari.es/download/](https://summari.es/download/).
+
 Data Processing Tools
 =====================
 
