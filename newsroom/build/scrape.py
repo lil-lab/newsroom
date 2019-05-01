@@ -1,3 +1,5 @@
+################################################################################
+
 import click
 import os.path
 
@@ -8,6 +10,7 @@ from newsroom import jsonl
 
 import random
 
+################################################################################
 
 def _exactness(url, amount):
 
@@ -21,7 +24,7 @@ def _exactness(url, amount):
     before = "/".join(root + [date])
     return "id_/".join([before] + after)
 
-
+################################################################################
 
 urls_file = click.Path(
     exists       = True,
@@ -38,6 +41,7 @@ archive_file = click.Path(
     resolve_path = True,
 )
 
+################################################################################
 
 @click.command()
 
@@ -100,6 +104,8 @@ archive_file = click.Path(
     is_flag = True,
     help = "Compute difference between URLs and downloaded data.",
 )
+
+################################################################################
 
 def main(urls, thin, archive, exactness, diff, **downloader_args):
 
@@ -244,3 +250,6 @@ def main(urls, thin, archive, exactness, diff, **downloader_args):
 
         print("\n\nDownload aborted with progress preserved.")
         print("Run script again to resume from this point.")
+
+################################################################################
+

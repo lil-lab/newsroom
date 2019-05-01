@@ -21,4 +21,4 @@ for line in sys.stdin:
 
         summary = article["text"]
 
-    print(json.dumps(summary), flush = True)
+    print(summary.replace("\n", " "), flush = True)

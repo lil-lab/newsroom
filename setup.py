@@ -17,12 +17,16 @@ setup(
         "numpy==1.13.3",
         "ujson==1.35",
         "spacy==2.0.4",
+        "pyrouge==0.1.3",
     ],
 
     entry_points = {
         "console_scripts": [
             "newsroom-scrape=newsroom.build.scrape:main",
             "newsroom-extract=newsroom.build.extract:main",
+            "newsroom-run=newsroom.evaluate.run:main",
+            "newsroom-score=newsroom.evaluate.score:main",
+            "newsroom-tables=newsroom.evaluate.tables:main",
         ]
     }
 )

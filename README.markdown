@@ -1,7 +1,7 @@
 Installation Instructions
 =========================
 
-Newsroom requires Python 3 and can be installed using `pip`:
+Newsroom requires Python 3.6+ and can be installed using `pip`:
 
 ```sh
 pip install -e git+git://github.com/clic-lab/newsroom.git#egg=newsroom
@@ -60,7 +60,7 @@ downloaded by `newsroom-scrape`. This tool produces a new file that does not
 modify the original output file of `newsroom-scrape`, and can be run with:
 
 ```sh
-newsroom-extract --archive dev.archive --dataset dev.data
+newsroom-extract --archive dev.archive --dataset dev.dataset
 ```
 
 The script automatically parallelizes extraction across your CPU cores. To
@@ -80,12 +80,12 @@ from newsroom import jsonl
 
 # Read entire file:
 
-with jsonl.open("train.data", gzip = True) as train_file:
+with jsonl.open("train.dataset", gzip = True) as train_file:
     train = train_file.read()
 
 # Read file entry by entry:
 
-with jsonl.open("train.data", gzip = True) as train_file:
+with jsonl.open("train.dataset", gzip = True) as train_file:
     for entry in train_file:
         print(entry["summary"], entry["text"])
 ```
@@ -104,7 +104,7 @@ import random
 from newsroom import jsonl
 from newsroom.analyze import Fragments
 
-with jsonl.open("train.data", gzip = True) as train_file:
+with jsonl.open("train.dataset", gzip = True) as train_file:
     train = train_file.read()
 
 # Compute stats on random training example:
@@ -128,4 +128,60 @@ print(fragments.strings())
 Evaluation Tools
 ================
 
-Available soon!
+The Newsroom package contains a standardized way for running and scoring
+Docker-based summarization systems. For an example, see the `/example` directory
+for a Docker image of the TextRank system used in the paper.
+
+The package also contains a script for producing tables similar to those in the
+paper for compression, coverage, and density. These tables are helpful for
+understanding your system's performance across different difficulties of
+text-summary pairs.
+
+Running Your System
+-------------------
+
+After starting Docker and building your image (named "textrank" in the following
+examples), the system can be evaluated using the script:
+
+```sh
+newsroom-run \
+    --system textrank \              # Name of Docker image.
+    --dataset dev.dataset \          # Path to evaluation data.
+    --summaries textrank.summaries   # Output path to write system summaries.
+```
+
+The script runs your system Docker image, passes article text (and other
+requested metadata) into the container through standard input, expecting
+summaries to be supplied on standard output.
+
+Scoring Your System
+-------------------
+
+To score your system, run the following:
+
+```sh
+newsroom-score \
+    --dataset dev.dataset \          # Path to evaluation data.
+    --summaries textrank.summaries \ # Path to system's output summaries.
+    --scores textrank.scores \       # Output path to write summary scores.
+    --rouge 1,2,L \                  # ROUGE variants to run.
+    --unstemmed                      # Or, --stemmed for Porter stemming.
+```
+
+The script produces a file (`textrank.scores`) containing pairs of system and
+reference summaries, article metadata for analysis, and ROUGE scores.
+Additionally, overall ROUGE scores are printed on completion.
+
+Producing Output Tables
+-----------------------
+
+To produce ROUGE tables across Newsroom compression, density, and coverage
+subsets, run the following:
+
+```sh
+newsroom-tables \
+    --scores textrank.scores \
+    --rouge 1,2,L \
+    --variants fscore \
+    --bins density,compression,coverage
+```

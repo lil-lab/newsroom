@@ -193,6 +193,17 @@ class open(object):
         return self.readlines()
 
 
+    def __len__(self):
+
+        length = 0
+
+        for line in self._readfile():
+
+            length += 1
+
+        return length
+
+
     def close(self):
 
         """

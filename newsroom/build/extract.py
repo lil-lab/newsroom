@@ -1,3 +1,5 @@
+################################################################################
+
 from tqdm import tqdm
 
 import click, os
@@ -8,6 +10,8 @@ from . import Article
 
 from newsroom import jsonl
 from newsroom.analyze import Fragments
+
+################################################################################
 
 archive_file = click.Path(
     exists       = True,
@@ -22,6 +26,8 @@ dataset_file = click.Path(
     writable     = True,
     resolve_path = True,
 )
+
+################################################################################
 
 cutoffs = {
     "coverage":    (0.7857142857, 0.9444444444),
@@ -43,6 +49,7 @@ def binner(value, cutoffs, levels):
 
     return levels[-1]
 
+################################################################################
 
 @click.command()
 
@@ -81,7 +88,7 @@ def binner(value, cutoffs, levels):
     help = "Items processed between updates. [default = 20*CPUs]",
 )
 
-# Check which URLs we need to download (read dataset, if exists)
+################################################################################
 
 def main(archive, urldiff, dataset, workers, chunksize):
 
@@ -210,3 +217,5 @@ def main(archive, urldiff, dataset, workers, chunksize):
                 process_chunk()
 
     print("\nExtraction complete.")
+
+################################################################################
