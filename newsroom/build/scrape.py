@@ -48,27 +48,27 @@ archive_file = click.Path(
 @click.option(
     "--urls",
     type = urls_file,
-    help = "Path to URL list of articles to download.",
+    help = "Input path to URL list of articles to download.",
 )
 
 @click.option(
     "--thin",
     type = urls_file,
-    help = "Path to template dataset to complete by downloading.",
+    help = "Input path to \"thin\" template dataset.",
 )
 
 @click.option(
     "--archive",
     type = archive_file,
     required = True,
-    help = "Path to dataset of raw article HTML.",
+    help = "Output path to write raw article HTML.",
 )
 
 @click.option(
     "--exactness",
     type = int,
     default = None,
-    help = "Number date digits to use. [default = all]",
+    help = "Exactness value. [see README]",
 )
 
 @click.option(
@@ -102,7 +102,7 @@ archive_file = click.Path(
 @click.option(
     "--diff",
     is_flag = True,
-    help = "Compute difference between URLs and downloaded data.",
+    help = "Check remaining URLs to download. [default = off]",
 )
 
 ################################################################################

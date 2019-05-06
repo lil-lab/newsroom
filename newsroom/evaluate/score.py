@@ -4,7 +4,7 @@ import json, bz2, click
 from newsroom import jsonl
 
 from tqdm import tqdm
-from newsroom.analyze.rouge import perl
+from newsroom.analyze.rouge import ROUGE_N, ROUGE_L
 
 ################################################################################
 
@@ -33,12 +33,39 @@ output_file = click.Path(
 
 @click.command()
 
-@click.option("--dataset",   type = articles_file,  required = True)
-@click.option("--summaries", type = summaries_file, required = True)
-@click.option("--scores",    type = output_file,    required = True)
+@click.option(
+    "--dataset",
+    type = articles_file,
+    required = True,
+    help = "Input path to full dataset."
+)
 
-@click.option("--rouge", type = str, default = "1,2,L")
-@click.option('--stemmed/--unstemmed', default = False)
+@click.option(
+    "--summaries",
+    type = summaries_file,
+    required = True,
+    help = "Input path to system summary output."
+)
+
+@click.option(
+    "--scores",
+    type = output_file,
+    required = True,
+    help = "Output path for system evaluation."
+)
+
+@click.option(
+    "--rouge",
+    type = str,
+    default = "1,2,L",
+    help = "List of ROUGE types to use. [default = 1,2,L]"
+)
+
+@click.option(
+    "--stemmed/--unstemmed",
+    default = False,
+    help = "Turn on or off Porter stemming. [default = off]"
+)
 
 ################################################################################
 
@@ -46,8 +73,6 @@ def main(dataset, summaries, scores, rouge, stemmed):
 
     rouges = rouge.upper().split(",")
     aggregate = {"ROUGE-" + r: [] for r in rouges}
-
-    ROUGE_N, ROUGE_L = perl.ROUGE_N, perl.ROUGE_L
 
     with jsonl.open(dataset, gzip = True) as a:
         with jsonl.open(summaries, gzip = True) as s:

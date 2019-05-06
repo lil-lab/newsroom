@@ -147,7 +147,8 @@ examples), the system can be evaluated using the script:
 newsroom-run \
     --system textrank \              # Name of Docker image.
     --dataset dev.dataset \          # Path to evaluation data.
-    --summaries textrank.summaries   # Output path to write system summaries.
+    --summaries textrank.summaries \ # Output path to write system summaries.
+    --keys text                      # JSON keys to feed Docker system.
 ```
 
 The script runs your system Docker image, passes article text (and other
@@ -185,3 +186,6 @@ newsroom-tables \
     --variants fscore \
     --bins density,compression,coverage
 ```
+
+All command line tools have a `--help` flag that show a description of arguments
+and their defaults.

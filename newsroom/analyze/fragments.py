@@ -1,3 +1,5 @@
+################################################################################
+
 import html as _html
 import itertools as _itertools
 import random as _random
@@ -5,14 +7,31 @@ import random as _random
 from collections import namedtuple as _namedtuple
 
 import spacy as _spacy
-_en = _spacy.load("en_core_web_sm")
+from os import system as _system
 
+################################################################################
 
 class Fragments(object):
 
     Match = _namedtuple("Match", ("summary", "text", "length"))
 
+    @classmethod
+    def _load_model(cls):
+
+        if not hasattr(cls, "_en"):
+
+            try:
+
+                cls._en = _spacy.load("en_core_web_sm")
+
+            except:
+
+                _system("python -m spacy download en_core_web_sm")
+                cls._en = _spacy.load("en_core_web_sm")
+
     def __init__(self, summary, text, tokenize = True, case = False):
+
+        self._load_model()
 
         self._tokens = tokenize
 
@@ -34,8 +53,7 @@ class Fragments(object):
 
         """
 
-        return _en(text, disable = ["tagger", "parser", "ner", "textcat"])
-        # return _en(text, tag = False, entity = False, parse = False)
+        return self._en(text, disable = ["tagger", "parser", "ner", "textcat"])
 
 
     def _normalize(self, tokens, case = False):
@@ -404,3 +422,5 @@ class Fragments(object):
             "#de9ed6",
 
         ))
+
+################################################################################

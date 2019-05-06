@@ -17,10 +17,33 @@ scores_file = click.Path(
 
 @click.command()
 
-@click.option("--scores",   type = scores_file, required = True)
-@click.option("--rouge",    type = str, default = "1,2,L")
-@click.option("--variants", type = str, default = "precision,recall,fscore")
-@click.option("--bins",     type = str, default = "density,coverage,compression")
+@click.option(
+    "--scores",
+    type = scores_file,
+    required = True,
+    help = "Input path to system scored summaries."
+)
+
+@click.option(
+    "--rouge",
+    type = str,
+    default = "1,2,L",
+    help = "List of ROUGE types to show. [default = 1,2,L]"
+)
+
+@click.option(
+    "--variants",
+    type = str,
+    default = "precision,recall,fscore",
+    help = "List of ROUGE score variants to show. [default = precision,recall,fscore]"
+)
+
+@click.option(
+    "--bins",
+    type = str,
+    default = "density,coverage,compression",
+    help = "List of summary bins to aggregate across. [default = density,coverage,compression]"
+)
 
 ################################################################################
 

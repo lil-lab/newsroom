@@ -57,21 +57,21 @@ def binner(value, cutoffs, levels):
     "--archive",
     type = archive_file,
     default = None,
-    help = "Path to dataset of raw article HTML.",
+    help = "Input path to dataset of raw article HTML."
 )
 
 @click.option(
     "--urldiff",
     type = archive_file,
     default = None,
-    help = "Path to URL to compute difference with extracted.",
+    help = "Input path to check remaining URLs to download."
 )
 
 @click.option(
     "--dataset",
     type = dataset_file,
     required = True,
-    help = "Path to processed article-summary dataset.",
+    help = "Output path for final dataset.",
 )
 
 @click.option(

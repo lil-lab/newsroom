@@ -42,10 +42,33 @@ summaries_file = click.Path(
 
 @click.command()
 
-@click.option("--system",    type = str,            required = True)
-@click.option("--dataset",   type = articles_file,  required = True)
-@click.option("--summaries", type = summaries_file, required = True)
-@click.option("--keys",      type = str, default = "text")
+@click.option(
+    "--system",
+    type = str,
+    required = True,
+    help = "Name of docker image."
+)
+
+@click.option(
+    "--dataset",
+    type = articles_file,
+    required = True,
+    help = "Input path to full dataset."
+)
+
+@click.option(
+    "--summaries",
+    type = summaries_file,
+    required = True,
+    help = "Output path for system generated summaries."
+)
+
+@click.option(
+    "--keys",
+    type = str,
+    default = "text",
+    help = "List of dataset keys to pass to system. [default = text]"
+)
 
 ################################################################################
 

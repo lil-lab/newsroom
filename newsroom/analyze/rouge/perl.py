@@ -6,12 +6,18 @@ import functools
 from os.path import abspath, dirname, join
 import pyrouge, logging, tempfile
 from collections import namedtuple
+from os import system
 
 pyrouge.utils.log.logging.disable(logging.CRITICAL)
 
 ROUGEResult = namedtuple("ROUGEResult", [
     "precision", "recall", "fscore"
 ])
+
+################################################################################
+
+exceptions_script = join(abspath(dirname(__file__)), "exceptions.sh")
+system("sh " + exceptions_script)
 
 ################################################################################
 

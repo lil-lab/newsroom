@@ -10,7 +10,7 @@ extract:
 
 run:
 	@newsroom-run \
-		--system example \
+		--system textrank \
 		--dataset data/test.dataset \
 		--summaries data/test.summaries
 
