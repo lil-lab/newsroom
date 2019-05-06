@@ -40,6 +40,7 @@ setup(
             "newsroom-run=newsroom.evaluate.run:main",
             "newsroom-score=newsroom.evaluate.score:main",
             "newsroom-tables=newsroom.evaluate.tables:main",
+            "newsroom-kaggle=newsroom.evaluate.kaggle:main",
         ]
     },
 
