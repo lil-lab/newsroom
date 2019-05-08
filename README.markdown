@@ -110,7 +110,7 @@ with jsonl.open("train.dataset", gzip = True) as train_file:
 # Compute stats on random training example:
 
 entry = random.choice(train)
-summary, text = train[0]["summary"], train[0]["text"]
+summary, text = entry["summary"], entry["text"]
 fragments = Fragments(summary, text)
 
 # Print paper metrics:
