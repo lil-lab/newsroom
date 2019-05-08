@@ -80,6 +80,7 @@ def main(system, dataset, summaries, keys):
 
         [
             "docker", "run", "--rm",
+            "--name", system,
             "-a", "stdin", "-a", "stdout",
             "-i", system
         ],

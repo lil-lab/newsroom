@@ -6,6 +6,11 @@ from newsroom import jsonl
 from tqdm import tqdm
 from newsroom.analyze.rouge import ROUGE_N, ROUGE_L
 
+from multiprocessing import cpu_count
+from concurrent.futures import ProcessPoolExecutor
+
+from .compute_rouge import *
+
 ################################################################################
 
 articles_file = click.Path(
@@ -67,12 +72,25 @@ output_file = click.Path(
     help = "Turn on or off Porter stemming. [default = off]"
 )
 
+@click.option(
+    "--workers",
+    type = int,
+    default = cpu_count(),
+    help = "Number of processes to use. [default = CPU count]",
+)
+
+@click.option(
+    "--chunksize",
+    type = int,
+    default = cpu_count() * 20,
+    help = "Items processed between updates. [default = 20*CPUs]",
+)
+
 ################################################################################
 
-def main(dataset, summaries, scores, rouge, stemmed):
+def main(dataset, summaries, scores, rouge, stemmed, workers, chunksize):
 
     rouges = rouge.upper().split(",")
-    aggregate = {"ROUGE-" + r: [] for r in rouges}
 
     with jsonl.open(dataset, gzip = True) as a:
         with jsonl.open(summaries, gzip = True) as s:
@@ -82,68 +100,59 @@ def main(dataset, summaries, scores, rouge, stemmed):
                 # (So we write, rather than appending.)
 
                 f.delete()
+                size = len(s)
+                chunk = []
 
-                dataset_size = len(s)
+                with tqdm(total = size, desc = "Evaluating") as progress:
 
-                progress = tqdm(
-                    zip(a, s),
-                    total = dataset_size,
-                    desc  = "Evaluating"
-                )
+                    def process_chunk():
 
-                for aline, sline in progress:
+                        with ProcessPoolExecutor(workers) as ex:
 
-                    ref = aline["summary"]
-                    sys = sline["system"]
+                            results = list(ex.map(compute_rouge, chunk))
 
-                    results = {}
+                            f.append(results)
+                            progress.update(len(results))
 
-                    for rouge in rouges:
+                    for aline, sline in zip(a, s):
 
-                        if rouge == "L":
+                        chunk.append([aline, sline, rouges, stemmed])
 
-                            result = ROUGE_L(ref, sys, stem = stemmed)
+                        if len(chunk) >= chunksize:
 
-                        else:
+                            process_chunk()
+                            chunk = []
 
-                            try:
+                    process_chunk()
 
-                                result = ROUGE_N(
-                                    ref, sys,
-                                    n = int(rouge),
-                                    stem = stemmed)
+    aggregate = {}
+    with jsonl.open(scores, gzip = True) as f:
 
-                            except ValueError:
+        for entry in f:
+            for k, v in entry.items():
 
-                                raise ValueError("Invalid ROUGE " + rouge)
+                if not k.startswith("rouge_"):
+                    continue
 
-                        for kind in ("precision", "recall", "fscore"):
-
-                            results[f"rouge_{rouge}_{kind}"] = getattr(result, kind)
-                            aggregate[f"ROUGE-{rouge}"].append(result)
-
-                    results["reference"] = ref
-                    results["system"] = sys
-
-                    results.update({
-                        k: v for k, v in aline.items()
-                        if k not in ("text", "summary", "title")
-                    })
-
-                    f.appendline(results)
+                if k not in aggregate:
+                    aggregate[k] = []
+                else:
+                    aggregate[k].append(v)
 
     print("\nScoring complete. Overall statistics:\n")
     for name, scores in aggregate.items():
 
-        recall    = sum(s.recall    for s in scores) / len(scores) * 100
-        precision = sum(s.precision for s in scores) / len(scores) * 100
-        fscore    = sum(s.fscore    for s in scores) / len(scores) * 100
+        pretty = name \
+            .title() \
+            .replace("_", " ") \
+            .replace("Rouge ", "ROUGE-") \
+            .replace("Fscore", "F-Score:  ") \
+            .replace("Precision", "Precision:") \
+            .replace("Recall", "Recall:   ")
 
-        print(name, "recall:",    round(recall,    4))
-        print(name, "precision:", round(precision, 4))
-        print(name, "fscore:",    round(fscore,    4))
-        print()
+        print(pretty, round(sum(scores) / len(scores) * 100, 4))
 
+    print()
     print("Next, run newsroom-tables for detailed statistics.")
 
 ################################################################################
