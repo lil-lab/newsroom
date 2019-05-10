@@ -9,8 +9,12 @@ class installwrap(install):
     def run(self):
 
         install.run(self)
-        system("python -m spacy download en_core_web_sm")
-        system("apt-get install -y libxml-parser-perl")
+
+        try: system("python -m spacy download en_core_web_sm")
+        except: pass
+
+        try: system("apt-get install -y libxml-parser-perl")
+        except: pass
 
 
 setup(
