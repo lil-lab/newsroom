@@ -2451,6 +2451,9 @@ sub wlcs {
       }
     }
   }
+  if($$base==0) {
+      $$base=1e-8;
+  }
   $$score=wlcsWeightInverse($$hit/$$base,$weightFactor);
 }
 
