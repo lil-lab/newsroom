@@ -40,11 +40,20 @@ Here's a download link for the raw data CSV from our original evaluation.
 It contains all article texts, system summaries, and each of the raw crowdworker ratings for the text/system pairs.
 It may also be helpful for you if you are comparing your work to previous systems.
 
-**Raw Data:** https://drive.google.com/file/d/1kfTaumN4pio63dpXB_5USl2yAJYRcSKC
+**Raw Data:** `newsroom-human-eval.csv`
+
+A copy of the all human ratings — there are 60 articles, 7 systems, and 3 ratings by different people for each system for a total of 1,260 rows. Each row is a single rating across the four dimensions from the paper. The columns are:
+
+- System - name of the sumarization system/baseline being rated
+- ArticleID - index of the article in the dataset, can be used to group by article
+- ArticleText, ArticleTitle, SystemSummary - three inputs the rater sees (HTML encoded for AMT)
+- CoherenceRating, FluencyRating, InformativenessRating, RelevanceRating - ratings (1-5)
 
 The raw data CSV has multiple entries per system for each worker.
-So, you will need to dedeplicate by article ID to use it as a starting point for your task.
+So, you will need to deduplicate by article ID to use it as a starting point for your task.
 Otherwise, this file provides all input data you need to run the task, minus your system summaries.
 Article ID will also let you find the original articles in the full data release, if you need to do this.
+
+
 
 Contact us at newsroom-summaries@googlegroups.com if you have questions!
