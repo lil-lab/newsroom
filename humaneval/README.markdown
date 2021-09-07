@@ -52,7 +52,7 @@ A copy of the all human ratings — there are 60 articles, 7 systems, and 3 rati
 The raw data CSV has multiple entries per system for each worker.
 So, you will need to deduplicate by article ID to use it as a starting point for your task.
 Otherwise, this file provides all input data you need to run the task, minus your system summaries.
-Article ID will also let you find the original articles in the full data release, if you need to do this.
+The article ID will allow you to group the articles. The articles are taken from the publicly available test set. You can find them via text matching the source text, but will have to make sure to handle any formatting tasks and white spaces to get a match.
 
 
 
