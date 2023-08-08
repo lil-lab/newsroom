@@ -105,6 +105,11 @@ print(fragments.strings())
 Evaluation Tools
 ================
 
+
+> [Aug 8, 2023] The evaluation pipeline does not keep track of sentence tokenization, which may result in lower-than-expected ROUGE-L scores, and that the newsroom-run -> newsroom-score -> newsroom-tables evaluation pipeline should not be used for publishable evaluation.
+> Please see: https://github.com/lil-lab/newsroom/issues/28
+
+
 The Newsroom package contains a standardized way for running and scoring Docker-based summarization systems. For an example, see the `/example` directory for a Docker image of the TextRank system used in the paper.
 
 The package also contains a script for producing tables similar to those in the paper for compression, coverage, and density. These tables are helpful for understanding your system's performance across different difficulties of text-summary pairs.
